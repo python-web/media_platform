@@ -1,0 +1,27 @@
+{% extends "header.html" %}
+
+{% block header_title %} Movie {% end %}
+{% block header_static %}
+<link rel="stylesheet" href="{{static_url('css/list_new.css')}}">
+<link rel="stylesheet" href="{{static_url('css/v3-basic_other.css')}}">
+{% end %}
+{% block body %}
+<div class="page-list">
+    <div class="wrapper-content clearfix mb20">
+        <div class="site-main">
+            <div class="mod_sear_menu mt20 mb30">
+                <div class="mod_sear_list" data-expcol-cls="mod_sear_list_open" data-widget-expcol="expcol">
+                    <h3>类型:</h3>
+                    <ul class="mod_category_item">
+                        <li ><a herf="/movie"> 电影</a></li>
+                        <li ><a herf="/tv">电视剧</a></li>
+                        <li class="selected"><a herf="/cartoon">动漫</a></li>
+                        <li ><a herf="/3d">3D</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% end %}

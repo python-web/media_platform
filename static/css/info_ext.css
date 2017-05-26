@@ -1,0 +1,14 @@
+﻿@charset "utf-8";
+/* CSS Document */
+embed { border:none; }
+.c01 { color:#1278f6; }
+.c02 { color:#9a4122; }
+.c03 { color:#fff; }
+.c04 { color:#aaa; }
+.c05 { color:#5D5D5D; }
+.lf { float:left; display:inline; }
+.rt { float:right; display:inline; }
+.daohang { padding:0 10px}
+.daohang a{
+    color: #000000;
+}

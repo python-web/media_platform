@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block header_title %} Play video {% end %}
+{% block header_static %}
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+<script type="text/javascript" src="{{static_url('video-js-5.19.2/video.js')}}"> </script>
+<script type="text/javascript" src="{{static_url('js/videojs-contrib-media-sources.min.js')}}"> </script>
+<!-- 水印-->
+<script type="text/javascript" src="{{static_url('video-js-5.19.2/videojs.watermark.js')}}"></script>
+<!-- 播放HLS视频 跨域必须开启-->
+<script type="text/javascript" src="{{static_url('js/videojs-contrib-hls.js')}}"></script>
+<!-- 热键设定-->
+<script type="text/javascript" src="{{static_url('video-js-5.19.2/videojs.hotkeys.js')}}"></script>
+
+<link rel="stylesheet" href="{{static_url('video-js-5.19.2/video-js.css')}}">
+<link rel="stylesheet" href="{{static_url('video-js-5.19.2/videojs.watermark.css')}}">
+<link rel="stylesheet" href="{{static_url('video-js-5.19.2/videojs-sublime-skin.css')}}">
+<script>
+    videojs.options.flash.swf = "{{static_url('video-js-5.19.2/video-js.swf')}}";
+</script>
+{% end %}
+{% block body %}
+<div class="container col-md-12 col-lg-12 col-xs-12">
+    <div class="instructions">
+        <video id="play_demon" class="video-js vjs-sublime-skin col-md-12 col-lg-12 col-xs-12" controls preload="auto" height="1024" width="680" data-setup='{"techOrder":[ "flash","html5"]}' poster="">
+            {% for video in video_lists %}
+            <source src="{{video[1]}}" type="{{video[0]}}" ></source>
+            {% end %}
+        </video>
+
+    </div>
+
+    <script>
+        var video_demon = videojs('play_demon');
+        video_demon.ready(function () {
+            this.hotkeys({volumeStep:0.1, seekStep:5, enableModifiersForNumbers: false});
+
+        });
+        video_demon.watermark({file:"{{static_url('images/lee.png')}}"
+            , xpos:0
+            , ypos:0
+            , xrepeat:0
+            , opacity:0.5});
+        video_demon.play();
+    </script>
+</div>
+{% end %}

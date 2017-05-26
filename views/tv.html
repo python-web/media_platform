@@ -1,0 +1,64 @@
+{% extends "header.html" %}
+
+{% block header_title %} Movie {% end %}
+{% block header_static %}
+{% end %}
+{% block body %}
+
+<div id="page-content" class="single-page">
+    <div class="container">
+        <div class="row">
+            <div id="main-content" class="col-md-12">
+                <div class="box">
+                    <div class="box-header"><h2><i class="fa fa-film">电视剧</i></h2></div>
+                    <div class="line"></div>
+                    <div class="box-content">
+                        <div class="row">
+                            {% for item in tv_info %}
+                            <div class="col-md-2">
+                                <div class="zoom-container">
+                                    <div class="zoom-caption">
+                                        <span>{{item.tv_category}}</span>
+                                        <a href="/tv/{{item.tv_id}}">
+                                            <i class="fa fa-play-circle fa-5x" style="color: #fff"></i>
+                                        </a>
+                                        <p>{{item.tv_name}}</p>
+                                    </div>
+                                    <img id="{{item.tv_id}}" src="{{item.tv_image_path}}"/>
+                                </div>
+                                <h3 class="vid-name"><a href="/tv/{{item.tv_id}}">{{item.tv_name}}</a></h3>
+                                <div class="info">
+                                    <span><i class="fa fa-calendar"> {{item.tv_born}}</i></span>
+                                    <span>评分: {{item.tv_score}}</span>
+                                </div>
+                            </div>
+                            {% end %}
+
+                        </div>
+                    </div>
+                </div>
+                <center>
+                    <ul class="pagination">
+                        <li>
+                            <a href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+
+                        <li><a href="/tv/page/1">1</a></li>
+                        <li><a href="">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                        <li>
+                            <a href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </center>
+            </div>
+        </div>
+    </div>
+</div>
+{% end %}

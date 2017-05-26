@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block header_title %} Play {% end %}
+{% block header_static %}
+<script type="text/javascript" src="{{static_url('ckplayer/ckplayer.js')}}"></script>
+<div id="play_demon" class="container">
+
+</div>
+
+<script type="text/javascript">
+    var flashvars = {
+        p:0,
+        e:1
+    };
+    var video = ['{{ video_lists}}']
+    var support = ['all']
+    CKobject.embedHTML5('play_demon', 'ckplayer_01', 600,400, video, flashvars, support)
+</script>
+{% end %}

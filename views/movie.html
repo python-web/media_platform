@@ -1,0 +1,71 @@
+{% extends "header.html" %}
+
+{% block header_title %} Movie {% end %}
+{% block header_static %}
+{% end %}
+{% block body %}
+
+<div id="page-content" class="single-page">
+    <div class="container">
+        <div class="row">
+            <div id="main-content" class="col-md-12" >
+                <div class="box">
+                    <div class="box-header">
+                        <h2><i class="fa fa-globe"> 电影</i></h2>
+                    </div>
+                    <div class="line"></div>
+                    <div class="box-content">
+                            {% set movie_len = 0 %}
+                            {% for item in movie_info %}
+                            {% if movie_len%6 == 0%}
+                            {% if movie_len != 0%}
+                            </div>
+                            {% end %}
+                            <div class="row">
+                            {%end %}
+                            {% set movie_len = movie_len+1 %}
+                            <div class="col-md-2">
+                                <div class="zoom-container">
+                                    <div class="zoom-caption">
+                                        <span>{{item.category}}</span>
+                                        <a href=/movie/{{item.movie_id}}>
+                                            <i class="fa fa-play-circle fa-5x" style="color: #fff"></i>
+                                        </a>
+                                        <p>{{item.movie_name}}</p>
+                                    </div>
+                                    <img id="{{item.movie_id}}" src="{{item.image_path}}"/>
+                                </div>
+                                <h3 class="vid-name"><a href="/movie/{{item.movie_id}}">{{item.movie_name}}</a></h3>
+                                <div class="info">
+                                    <span><i class="fa fa-calendar"> {{item.born}}</i></span>
+                                    <span>评分: {{item.score}}</span>
+                                </div>
+                            </div>
+                            {% end %}
+                            </div>
+                    </div>
+                </div>
+                <center>
+                    <ul class="pagination">
+                        <li>
+							  <a href="#" aria-label="Previous">
+								<span aria-hidden="true">&laquo;</span>
+							  </a>
+                        </li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                        <li>
+                          <a href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                          </a>
+                        </li>
+                    </ul>
+                </center>
+            </div>
+        </div>
+    </div>
+</div>
+{% end %}

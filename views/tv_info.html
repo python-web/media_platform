@@ -1,0 +1,58 @@
+{% extends "header.html" %}
+
+{% block header_title %} Movie {% end %}
+{% block header_static %}
+<link rel="stylesheet" href="{{static_url('css/info.css')}}">
+<link rel="stylesheet" href="{{static_url('css/info_ext.css')}}">
+{% end %}
+{% block body %}
+
+<div id="page-content" class="single-page">
+    <div class="container">
+        <div class="play">
+            <div class="daohang">
+                当前位置:
+                <a href="/home">电影世界</a>
+                >>
+                <a href="/tv">电视剧</a>
+                >>
+                <a href="/tv/{{tv_info.tv_id}}">{{tv_info.tv_name}}</a>
+            </div>
+            <div class="vod">
+                <div class="vod_img lf">
+                    <img src="{{tv_info.tv_image_path}}" alt="{{tv_info.tv_name}}">
+                </div>
+                <div class="vod_intro rt">
+                    <h1>{{tv_info.tv_name}}<span class="year">({{tv_info.tv_born}})</span></h1>
+                    <dl>
+                        <dt>状态:</dt>
+                        <dd>{{tv_info.tv_state}}</dd>
+                        <dt>类型:</dt>
+                        <dd>{{tv_info.tv_category}}</dd>
+                        <dt>地区:</dt>
+                        <dd>{{tv_info.tv_area}}</dd>
+                        <dt>语言:</dt>
+                        <dd>{{tv_info.tv_language}}</dd>
+                        <dt>主演:</dt>
+                        <dd>{{tv_info.tv_performer}}</dd>
+                    </dl>
+                    <div class="des">
+                        <div class="c05"><strong>剧情简介</strong></div>
+                        <p>{{tv_info.tv_content}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="p_list">
+                <h2>阿里云视频</h2>
+                <ul class="p_list_03">
+                    {% for item in range(tv_info.tv_index) %}
+                    <li><a title="第{{item+1}}集" href="/play/tv/{{tv_info.tv_id}}?index={{item+1}}"
+                           target="_blank">第{{item+1}}集</a></li>
+                    {% end %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% end %}

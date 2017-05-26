@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>{% block header_title %}Site Title{% end %}</title>
+    <meta charset="utf-8" />
+    <meta name="renderer" content="webkit">
+    <link rel="stylesheet" href="{{ static_url('css/bootstrap.css') }}">
+    <link rel="stylesheet", href="{{ static_url('css/style.css')}}">
+    <link rel="stylesheet", href="{{ static_url('font-awesome-4.4.0/css/font-awesome.min.css')}}">
+    <link rel="stylesheet", href="{{ static_url('owl-carousel/owl.carousel.css')}}">
+    <link rel="stylesheet", href="{{ static_url('owl-carousel/owl.theme.css')}}">
+
+    <script src="{{ static_url('js/jquery-2.1.1.js')}}"></script>
+    <script src="{{ static_url('js/bootstrap.js')}}"></script>
+    <script src="{{ static_url('owl-carousel/owl.carousel.js')}}"></script>
+    {% block header_static %}{% end %}
+</head>
+<body>
+    <header>
+        {% block header_nav %} {% end %}
+    </header>
+
+    {% block body %} {% end %}
+
+    <footer>
+        <div class="bottom-footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 copyright ">
+                       <span>Copyright &copy; 2015.Company name All rights reserved.
+                       <a target="_blank" href="http://github.com/yuetianle">作者站点</a>
+                       </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </footer>
+    <script>
+        $(function () {
+            function footerPosition() {
+                $("footer").removeClass("fixed-bottom");
+                var contentHeight = document.body.scrollHeight, winHeight = window.innerHeight;//网页正文全文高度 可视窗口高度，不包括浏览器顶部工具栏
+                if (!(contentHeight > winHeight)) {
+                    //当网页正文高度小于可视窗口高度时，为footer添加类fixed-bottom
+                    $("footer").addClass("fixed-bottom");
+                } else {
+                    $("footer").removeClass("fixed-bottom");
+                }
+            }
+
+            footerPosition();
+            $(window).resize(footerPosition);
+        });
+    </script>
+{% block footer_static %}{% end %}
+</body>
+
+</html>

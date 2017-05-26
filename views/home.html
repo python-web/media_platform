@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% block header_title %} Home {% end %}
+{% block header_nav%}
+<nav id="menu" class="navbar">
+    <div class="container">
+        <div class="navbar-header"><span id="heading" class="visible-xs">Categories</span>
+            <button type="button" class="btn btn-navbar navbar-toggle" data-toggle="collapse"
+                    data-target=".navbar-ex1-collapse"><i class="fa fa-bars"></i></button>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="#"><i class="fa fa-home"></i>主页</a></li>
+                <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i
+                        class="fa fa-play-circle-o"></i>视频分类</a>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-inner">
+                            <ul class="list-unstyled">
+                                <li><a href="/movie">电影</a></li>
+                                <li><a href="/tv">电视剧</a></li>
+                                <li><a href="/cartoon">动漫</a></li>
+                                <li><a href="/3D">3D</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li><a href="/api/home">后台</a></li>
+            </ul>
+            <div class="right">
+                <form class="navbar-form navbar-left" role="search" method="post" >
+                    <div class="form-group">
+                        <input type="text" placeholder="search" >
+                    </div>
+                    <button type="submit" class="btn"> 查询 </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="header-slide">
+    <div id="owl-demo" class="owl-carousel">
+        {% for info in scan_info %}
+        <div class="item"></div>
+            <div class="zoom-container">
+                <div class="zoom-caption">
+                    <span>{{info.media_tags}}</span>
+                    {% if info.media_type == 0 %}<!-- tv -->
+                    <a href="/tv/{{info.media_id}}"><i class="fa fa-play-circle fa-5x" style="color: #fff;"></i></a>
+                    {% elif info.media_type ==1 %}<!--movie-->
+                    <a href="/movie/{{info.media_id}}"><i class="fa fa-play-circle fa-5x" style="color: #fff;"></i></a>
+                    {% end %}
+                    <p>{{info.media_name}}</p>
+                </div>
+                <img src="{{info.media_image_path}}">
+            </div>
+        {% end %}
+    </div>
+</div>
+
+{% end %}
+
+{% block body %}
+<div id="page-content" class="index-page">
+    <div class="container">
+        <div class="row">
+            <div id="main-content" class="col-md-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h2>
+                            <i class="fa fa-film"></i>
+                            电影
+                        </h2>
+                    </div>
+                    <div class="box-content">
+                            {% set movie_len=0 %}
+                            {% for item in movie_info %}
+                            {% if movie_len%6==0 %}
+                            {% if movie_len!=0 %}
+                                </div>
+                            {% end %}
+                            <div class="row">
+                            {% end %}
+                            <div class="col-md-2">
+                                <div class="wrap-vid">
+                                    <div class="zoom-container">
+                                        <div class="zoom-caption">
+                                            <span>{{item.movie_category}}</span>
+                                            <a href="/movie/{{item.movie_id}}">
+                                                <i class="fa fa-play-circle-o fa-5x" style="color: #fff"></i>
+                                            </a>
+                                            <p>{{item.movie_name}}</p>
+                                        </div>
+                                        <img id="{{item.movie_id}}" src= "{{item.movie_image_path}}"/>
+                                    </div>
+                                    <h3 class="vid-name"><a href="/movie/{{item.movie_id}}">{{item.movie_name}}</a></h3>
+                                    <div class="info">
+                                        <span><i class="fa fa-calendar"></i>{{item.movie_born}}</span>
+                                        <span> 评分: {{item.movie_score}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            {% set movie_len = movie_len+1 %}
+                            {% end %}
+                            </div>
+                    </div>
+                </div>
+                <div class="line"></div>
+                <div class="box">
+                    <div class="box-header">
+                        <h2>
+                            <i class="fa fa-globe"></i>
+                            电视剧
+                        </h2>
+                    </div>
+                    <div class="box-content">
+                        {% set tv_length = 0%}
+                            {% for item in tv_info %}
+                            {% if tv_length%6 == 0%}
+                            {% if tv_length != 0%}
+                            </div>
+                            {%end%}
+                            <div class="row">
+                            {% end %}
+                            {% set tv_length=tv_length+1 %}
+                            <div class="col-md-2">
+                                <div class="wrap-vid">
+                                    <div class="zoom-container">
+                                        <div class="zoom-caption">
+                                            <span>{{item.tv_category}}</span>
+                                            <a href="/tv/{{item.tv_id}}">
+                                                <i class="fa fa-play-circle-o fa-5x" style="color: #fff"></i>
+                                            </a>
+                                            <p>{{item.tv_name}}</p>
+                                        </div>
+                                        <img src="{{item.tv_image_path}}"/>
+                                    </div>
+                                    <h3 class="vid-name"><a href="/tv/{{item.tv_id}}">{{item.tv_name}}</a></h3>
+                                    <div class="info">
+                                        <span><i class="fa fa-calendar"></i>{{item.tv_born}}</span>
+                                        <span>评分: {{item.tv_score}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            {% end %}
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- JS -->
+<script>
+    $(document).ready(function() {
+        $("#owl-demo").owlCarousel({
+            autoPlay: 3000,
+            items : 5,
+            itemsDesktop : [1199,4],
+            itemsDesktopSmall : [979,4]
+        });
+    });
+</script>
+{% end %}
