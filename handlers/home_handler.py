@@ -30,7 +30,7 @@ class HomeHandler(BaseHandler):
 
         #查找首页显示电视剧 #算法以后更新
         tv_cousor = self.db.tv.find()
-        tv_lists = yield tv_cousor.to_list(length=10)
+        tv_lists = yield tv_cousor.to_list(length=12)
         tv_info_list = []
         for item in tv_lists:
             tv_render = RenderInfo(item)
@@ -40,7 +40,7 @@ class HomeHandler(BaseHandler):
 
         #查找首页显示电影 #算法以后更新
         movie_cursor = self.db.movie.find()
-        movie_lists = yield movie_cursor.to_list(length=10)
+        movie_lists = yield movie_cursor.to_list(length=12)
         movie_info_list = []
         for item in movie_lists:
             movie_render = RenderInfo(item)

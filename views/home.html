@@ -74,10 +74,8 @@
                     <div class="box-content">
                             {% set movie_len=0 %}
                             {% for item in movie_info %}
+                            {% set movie_len = movie_len+1 %}
                             {% if movie_len%6==0 %}
-                            {% if movie_len!=0 %}
-                                </div>
-                            {% end %}
                             <div class="row">
                             {% end %}
                             <div class="col-md-2">
@@ -99,9 +97,10 @@
                                     </div>
                                 </div>
                             </div>
-                            {% set movie_len = movie_len+1 %}
-                            {% end %}
+                            {% if movie_len%6==0 %}
                             </div>
+                            {% end %}
+                            {% end %}
                     </div>
                 </div>
                 <div class="line"></div>
@@ -115,13 +114,10 @@
                     <div class="box-content">
                         {% set tv_length = 0%}
                             {% for item in tv_info %}
+                            {% set tv_length=tv_length+1 %}
                             {% if tv_length%6 == 0%}
-                            {% if tv_length != 0%}
-                            </div>
-                            {%end%}
                             <div class="row">
                             {% end %}
-                            {% set tv_length=tv_length+1 %}
                             <div class="col-md-2">
                                 <div class="wrap-vid">
                                     <div class="zoom-container">
@@ -142,7 +138,9 @@
                                 </div>
                             </div>
                             {% end %}
+                            {% if tv_length%6 == 0%}
                             </div>
+                            {% end %}
                     </div>
                 </div>
             </div>

@@ -12,6 +12,7 @@
 <!-- 热键设定-->
 <script type="text/javascript" src="{{static_url('video-js-5.19.2/videojs.hotkeys.js')}}"></script>
 
+<script type="text/javascript" src="{{static_url('video-js-5.19.2/flv.js')}}"></script>
 <link rel="stylesheet" href="{{static_url('video-js-5.19.2/video-js.css')}}">
 <link rel="stylesheet" href="{{static_url('video-js-5.19.2/videojs.watermark.css')}}">
 <link rel="stylesheet" href="{{static_url('video-js-5.19.2/videojs-sublime-skin.css')}}">
@@ -22,14 +23,33 @@
 {% block body %}
 <div class="container col-md-12 col-lg-12 col-xs-12">
     <div class="instructions">
-        <video id="play_demon" class="video-js vjs-sublime-skin col-md-12 col-lg-12 col-xs-12" controls preload="auto" height="1024" width="680" data-setup='{"techOrder":[ "flash","html5"]}' poster="">
+        {% if use_flv %}
+        <video id="play_demon" class="video-js vjs-sublime-skin col-md-12 col-lg-12 col-xs-12" controls preload="auto" height="1024" width="680" data-setup='{"techOrder":[ "html5","flash"]}' poster="">
+        </video>
+        {% else%}
+        <video id="play_demon" class="video-js vjs-sublime-skin col-md-12 col-lg-12 col-xs-12" controls preload="auto" height="1024" width="680" data-setup='{"techOrder":[ "html5", "flash"]}' poster="">
             {% for video in video_lists %}
             <source src="{{video[1]}}" type="{{video[0]}}" ></source>
             {% end %}
         </video>
+        {% end %}
 
     </div>
+    {% if use_flv %}
+    <script>
+        if (flvjs.isSupported())
+        {
+            var player_content = document.getElementById("play_demon");
+            {% for video in video_lists %}
+            var player = flvjs.createPlayer({type:'flv', url:'{{video[1]}}', isLive:true});
+            {% end %}
+            player.attachMediaElement(player_content);
+            player.load();
+            player.play();
 
+        }
+    </script>
+    {% else %}
     <script>
         var video_demon = videojs('play_demon');
         video_demon.ready(function () {
@@ -43,5 +63,6 @@
             , opacity:0.5});
         video_demon.play();
     </script>
+    {% end %}
 </div>
 {% end %}

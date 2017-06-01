@@ -42,24 +42,19 @@ class PlayHandler(BaseHandler):
                         result = self._get_xiongmao_play_url(target_url)
                         if result:
                             target_url = result
-                        for url in target_url:
-                            if url[0] == "application/m3u8_iqyi":
+                        #bilibli
                                 # url[0] = "application/vnd.apple.mpegurl"
-                                url[0] = "video/flv"
-                                iqiyi_site = iqiyi.Iqiyi()
-                                iqiyi_site.download_by_url(url[1], info_only=True)
-                                if choice == "高清":
-                                    choice = "TD"
-                                elif choice == "标清":
-                                    choice == "SD"
-                                print("streams:{0}".format(iqiyi_site.streams))
-                                url[1] = iqiyi_site.streams.get(choice).get("src")[0]
-                        #         bool_iqyi =True
-                        # if bool_iqyi:
-                        #     play_url_str = ",".join([url[1] for url in target_url])
-                        #     self.render("player.html", video_lists=play_url_str)
-                        # else:
-                        self.render("html5_player.html", video_lists=target_url)
+                        bili_result = self._get_bilibili_play_url(target_url)
+                        if bili_result:
+                            target_url = bili_result
+                        flv_contents = [item for item in target_url if item[0] == "video/flv"]
+                        bool_use_flv = False;
+                        if 0 < len(flv_contents):
+                            bool_use_flv = True
+                        iqyi_result = self._get_iqyi_play_url(target_url, choice=choice)
+                        if iqyi_result:
+                            target_url = iqyi_result
+                        self.render("html5_player.html", video_lists=target_url, use_flv = bool_use_flv)
             elif MediaTypeName.CartoonName.value == args[0]:
                 pass;
             elif MediaTypeName.M3D.value == args[0]:
@@ -95,12 +90,26 @@ class PlayHandler(BaseHandler):
             #     # self.render("ch_player.html", video_url=play_list)
 
 
+    def _get_bilibili_play_url(self, play_list):
+        is_true = False
+        if play_list and 0 < len(play_list):
+            for item in play_list:
+                if item[0] == "application/bili_mp4":
+                    item[0] = "video/mp4"
+                    real_url = bilibili_download(item[1], info_only=True)
+                    if real_url and 0 < len(real_url):
+                        item[1] = ",".join(real_url)
+                    is_true = True
+        if is_true:
+            return  play_list
+        else:
+            return None
     def _get_xiongmao_play_url(self, play_list):
         is_ture = False
         if play_list and 0 < len(play_list):
             for item in play_list:
                 if item[0] == "video/xiongmao_flv":
-                    item[0] = "video/x-flv"
+                    item[0] = "video/flv"
                     read_url = panda_download(item[1], info_only=True)
                     item[1] = read_url
                     is_ture = True
@@ -110,5 +119,23 @@ class PlayHandler(BaseHandler):
         else:
             return None
 
+    def _get_iqyi_play_url(self, play_list, choice=None):
+        is_ture = False
+        for url in play_list:
+            if url[0] == "application/m3u8_iqyi":
+                is_ture = True
+                url[0] = "application/vnd.apple.mpegurl"
+                iqiyi_site = iqiyi.Iqiyi()
+                iqiyi_site.download_by_url(url[1], info_only=True)
+                if choice == "高清":
+                    choice = "TD"
+                elif choice == "标清":
+                    choice == "SD"
+                print("streams:{0}".format(iqiyi_site.streams))
+                url[1] = iqiyi_site.streams.get(choice).get("src")[0]
+        if is_ture:
+            return play_list
+        else:
+            return None
 
 
