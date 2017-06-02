@@ -38,6 +38,7 @@
                                 <h3 class="vid-name"><a href="/movie/{{item.movie_id}}">{{item.movie_name}}</a></h3>
                                 <div class="info">
                                     <span><i class="fa fa-calendar"> {{item.born}}</i></span>
+                                    <br/>
                                     <span>评分: {{item.score}}</span>
                                 </div>
                             </div>
@@ -47,21 +48,37 @@
                 </div>
                 <center>
                     <ul class="pagination">
+                        {% if cur_page_index <= 1%}
                         <li>
 							  <a href="#" aria-label="Previous">
 								<span aria-hidden="true">&laquo;</span>
 							  </a>
                         </li>
+                        {% else%}
+                        <li>
+                            <a href="/movie/page/{{cur_page_index-1}}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        {% end %}
                         {% for item in range(1, page_count+1) %}
                             {% if item >= cur_page_index and item < cur_page_index+6 %}
                                 <li><a href="/movie/page/{{item}}">{{item}}</a></li>
                             {% end %}
                         {% end %}
+                        {%if cur_page_index < page_count %}
+                        <li>
+                            <a href="/movie/page/{{cur_page_index+1}}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        {%else%}
                         <li>
                           <a href="#" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                           </a>
                         </li>
+                        {% end %}
                     </ul>
                 </center>
             </div>

@@ -24,6 +24,8 @@ class MovieHandler(BaseHandler):
                       , performer=item.get(MovieInfoName.Performer.value)\
                       , image_path=self.static_url(item.get(MovieInfoName.ImagePath.value)))
             movie_list.append(movie)
+        if 30 < len(movie_list):
+            movie_list = movie_list[0:30]
         cur_page_index = 1
         page_count = int(len(item_list)/30) +1
         self.render("movie.html", movie_info= movie_list, cur_page_index=cur_page_index, page_count=page_count)

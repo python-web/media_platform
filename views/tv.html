@@ -13,8 +13,15 @@
                     <div class="box-header"><h2><i class="fa fa-film">电视剧</i></h2></div>
                     <div class="line"></div>
                     <div class="box-content">
+                        {% set tv_len = 0%}
+                        {% for item in tv_info %}
+                        {% if tv_len%6 ==0 %}
+                        {% if tv_len != 0%}
+                        </div>
+                        {%end%}
                         <div class="row">
-                            {% for item in tv_info %}
+                        {%end%}
+                        {% set tv_len= tv_len+ 1%}
                             <div class="col-md-2">
                                 <div class="zoom-container">
                                     <div class="zoom-caption">
@@ -39,22 +46,37 @@
                 </div>
                 <center>
                     <ul class="pagination">
+                        {% if cur_page_index <= 1%}
                         <li>
                             <a href="#" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
-
-                        <li><a href="/tv/page/1">1</a></li>
-                        <li><a href="">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
+                        {% else%}
+                        <li>
+                            <a href="/tv/page/{{cur_page_index-1}}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        {% end %}
+                        {% for item in range(1, page_count+1) %}
+                        {% if item >= cur_page_index and item < cur_page_index+6 %}
+                        <li><a href="/tv/page/{{item}}">{{item}}</a></li>
+                        {% end %}
+                        {% end %}
+                        {%if cur_page_index < page_count %}
+                        <li>
+                            <a href="/tv/page/{{cur_page_index+1}}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        {%else%}
                         <li>
                             <a href="#" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>
+                        {% end %}
                     </ul>
                 </center>
             </div>
