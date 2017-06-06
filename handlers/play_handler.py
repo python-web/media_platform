@@ -38,10 +38,15 @@ class PlayHandler(BaseHandler):
                     play_url_list = item.get(MovieInfoName.PlayUrl.value)
                     if play_url_list and isinstance(play_url_list, list) and 0 < len(play_url_list):
                         target_url = [play_url for play_url in play_url_list if play_url[2] == choice]
+                        if target_url[0][0] == "video/xiongmao_flv":
+                            result = self._get_xiongmao_play_url(target_url)
+                            if result:
+                                target_url = result
                         bool_iqyi = False
-                        result = self._get_xiongmao_play_url(target_url)
-                        if result:
-                            target_url = result
+                        if target_url[0][0] == "video/mp4_sohu":
+                            sohu_result = self._get_sohu_play_url(target_url)
+                            if sohu_result:
+                                target_url = sohu_result
                         #bilibli
                                 # url[0] = "application/vnd.apple.mpegurl"
                         bili_result = self._get_bilibili_play_url(target_url)
@@ -133,9 +138,38 @@ class PlayHandler(BaseHandler):
                     choice == "SD"
                 print("streams:{0}".format(iqiyi_site.streams))
                 url[1] = iqiyi_site.streams.get(choice).get("src")[0]
+        out_play_list = []
+        for play_item in play_list:
+            item = {}
+            item["sources"] =[{"src":play_item[1], "type":play_item[0]}]
+            out_play_list.append(item)
         if is_ture:
             return play_list
         else:
             return None
 
+    def _get_sohu_play_url(self, play_list, choice=None):
+        is_ture = False
+        out_play_list = []
+        for url in play_list:
+            if url[0] == "video/mp4_sohu":
+                is_ture = True
+                url[0] = "video/mp4"
+                letv_urls = sohu_download(url[1], info_only=True)
+                for item in letv_urls:
+                    full_item = ["vidoe/mp4", item]
+                    out_play_list.append(full_item)
+        if 0 < len(out_play_list):
+            return out_play_list
+        else:
+            return None
+    def _get_letv_play_url(self, play_list, choice=None):
+        is_ture = False
+        for url in play_list:
+            if url[0] == "application/mp4_letv":
+                is_ture = True
+                url[0] = "video/mp4"
+                letv_urls = letv_download(url[1], info_only=True)
+        if is_ture:
+            return play_list
 

@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>videojs-playlists demo</title>
+    <link href="../video-js.css" rel="stylesheet">
+  </head>
+  <body>
+    <video id="video" class="video-js vjs-default-skin" controls data-setup='{"techOrder":[ "html5", "flash"]}' width="640" height="264">
+      <!--<source type="application/vnd.apple.mpegurl" src="http://47.93.23.32:9006/vod/test.m3u8">-->
+    </video>
+    <h1></h1>
+    <button type="button" data-action="prev">Previous</button>
+    <button type="button" data-action="next">Next</button>
+
+    <script src="../../js/jquery-2.1.1.js"></script>
+    <script src="../video.js"></script>
+    <script src="../videojs-playlist.js"></script>
+    <script type="text/javascript" src="../../js/videojs-contrib-media-sources.js"></script>
+    <script type="text/javascript" src="../../js/videojs-contrib-hls.js"></script>
+    <script>
+      var videos = [
+          {
+              sources: [{ src : 'http://cache.m.iqiyi.com/mus/264501900/4f38c810470d145c5d61b791ec92e6e8/afbe8fd3d73448c9//20160417/cd/b9/6f6cbdfd06c2d943e50a4c21dadd1703.m3u8?np_tag=nginx_part_tag&qd_originate=tmts_py&tvid=264501900&bossStatus=0&qd_vip=0&px=&qd_src=3_31_312&prv=&previewType=&previewTime=&from=&qd_time=1496747481126&qypid=264501900_04022000001000000000_4&qd_k=aaecf11f3f52c2a6dbb9a8eeaa414005&qd_hip=2f5d1720&qd_nsc=fba23be0c0c59e66a40030dbba18438b&other='
+                  , type:"application/vnd.apple.mpegurl", }]
+          },
+
+          {
+              sources: [{ src : 'http://47.93.23.32:9006/vod/test.m3u8'
+                  , type:"application/vnd.apple.mpegurl", }]
+          },
+        {
+            sources: [{
+                src: 'http://img.ksbbs.com/asset/Mon_1703/d30e02a5626c066.mp4',
+                type: 'video/mp4',
+            }]
+        },
+          {
+              sources:[{
+              src :  'http://47.93.23.32:9007/taochujuemingzhen.mp4',
+              type: 'video/mp4',
+              }]
+          },
+      ];
+      var player = videojs('video', {inactivityTimeout: 0});
+      player.playlist(videos);
+//      player.play();
+//      Array.prototype.forEach.call()
+      player.playlist.autoadvance(0);
+    </script>
+  </body>
+</html>

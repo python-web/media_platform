@@ -4,9 +4,10 @@ from motor import MotorClient
 import tornado
 import tornado.web
 
-if __name__ == "__main__":
-    client = MotorClient("mongodb://47.93.23.32:27017")
-    db = client["media_platform"]
+def create_index(db):
+    db.movie.create_index("movie_id", unique=True, backgroud=True)
+    db.tv.create_index("tv_id", unique=True, backgroud=True)
+def insert_movie(db):
     movie_collection = db.movie
     movie_info = {"movie_id":"taochujuemingzhen_2017" \
         , "movie_name":"逃出绝命镇" \
@@ -22,7 +23,7 @@ if __name__ == "__main__":
         , "movie_language":"英语"}
     for item in range(100):
         movie_collection.insert(movie_info)
-
+def insert_tv(db):
     tv_collection = db.tv
     tv_info = {"tv_id":"xibushijie_2017"\
         , "tv_name":"西部世界"\
@@ -55,7 +56,12 @@ if __name__ == "__main__":
     tv_collection.insert(tv_info)
     tv_collection.insert(remote_tv_info)
 
+def insert_recomment(db):
     recomment = db.recomment
     recomment_info = {"media_id":"xibushijie_2017", "media_name":"西部世界"\
         , "media_type":0, "media_tags":"奇幻", "media_image_path":"images/tv/xibushijie_2017.jpg"}
     recomment.insert(recomment_info)
+if __name__ == "__main__":
+    client = MotorClient("mongodb://47.93.23.32:27017")
+    db = client["media_platform"]
+    create_index(db)

@@ -6,13 +6,20 @@ import tornado.web
 import tornado.gen
 
 
+PageCount = 30
 class MovieHandler(BaseHandler):
 
     @tornado.web.asynchronous
     @tornado.gen.coroutine
     def get(self, *args, **kwargs):
+        movie_count = yield self.db.movie.find().count()
+        last_movie_count = movie_count%PageCount
+        if last_movie_count<15:
+            page_count = int(movie_count/PageCount) +1
+        else:
+            page_count = int(movie_count/PageCount)
         #获取电影信息
-        cursor = self.db.movie.find()
+        cursor = self.db.movie.find().limit(PageCount)
         movie_list = []
         item_list = yield cursor.to_list(None)
         for item in item_list:
@@ -27,21 +34,30 @@ class MovieHandler(BaseHandler):
         if 30 < len(movie_list):
             movie_list = movie_list[0:30]
         cur_page_index = 1
-        page_count = int(len(item_list)/30) +1
-        self.render("movie.html", movie_info= movie_list, cur_page_index=cur_page_index, page_count=page_count)
+        cur_page_last_id = item_list[-1].get("_id")
+        #page_count = int(len(item_list)/30) +1
+        self.render("movie.html", movie_info= movie_list\
+                    , cur_page_index=cur_page_index\
+                    , page_count=page_count)
 class MoviePageHandler(BaseHandler):
     @tornado.web.asynchronous
     @tornado.gen.coroutine
     def get(self, *args, **kwargs):
-        cursor = self.db.movie.find()
+        movie_count = yield self.db.movie.find().count()
+        last_movie_count = movie_count%PageCount
+        if last_movie_count>0:
+            page_count = int(movie_count/PageCount) +1
+        else:
+            page_count = int(movie_count/PageCount)
+        page_index = int(args[0])
+        cursor = self.db.movie.find().skip((page_index-1)*PageCount).limit(PageCount)
         movie_list = []
         item_list = yield cursor.to_list(None)
-        page_count = int(len(item_list)/30) +1
-        page_index = int(args[0])
-        if page_index and page_index < page_count:
-            render_list = item_list[30*(page_index-1):page_index*30]
-        else:
-            render_list = item_list[30*(page_index-1):]
+        # if page_index and page_index < page_count:
+        #     render_list = item_list[30*(page_index-1):page_index*30]
+        # else:
+        #     render_list = item_list[30*(page_index-1):]
+        render_list = item_list
         movie_list = []
         for item in render_list:
             movie = MovieInfo(item.get(MovieInfoName.ID.value) \
