@@ -366,6 +366,123 @@ body.sub-page .logo {
     }
 }
 
+/*----- 分类查询----------------------------------------------------------------*/
+/*search_list*/
+.search_list {
+    width: 1170px;
+    margin: 12px auto 0;
+}
+.s_index h1 {
+    position: absolute;
+    left: 20px;
+    top: 25px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 20px;
+    text-align: center;
+    padding: 0 25px;
+    z-index: 2;
+    color: #09F;
+    border-radius: 25px;
+}
+.s_index {
+    padding: 0px 20px;
+    left: 0;
+    top: 4px;
+    width: 1130px;
+    border: 1px solid #E4E4E4;
+    background: #fff;
+    clear: both;
+    position: relative;
+}
+.s_index dl {
+    overflow: hidden;
+    padding: 5px 0px;
+    border-top: 1px solid #F0F0F0;
+    margin-top: -1px;
+}
+.s_index dt, .s_index dd {
+    display: inline;
+}
+.s_index dt {
+    float: left;
+    width: 63px;
+    height: 27px;
+    line-height: 27px;
+    text-align: center;
+    margin-right: 15px;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+}
+.s_index dd a {
+    margin: 0 1.75px;
+    display: inline-block;
+    line-height: 22px;
+    height: 22px;
+    text-align: center;
+    padding: 2px 10px;
+}
+.s_index dd a.a_now, .s_index dd .current, .s_index dd a:hover {
+    background: #1278f6;
+    color: #fff;
+    border-radius: 3px;
+}
+.list_su {
+    overflow: hidden;
+    width: 1170px;
+    margin: 10px auto 0;
+    clear: both;
+    background: #fff;
+    border: 1px solid #E4E4E4;
+}
+.list_su dl {
+    margin: 0 0 12px 12px;
+}
+.list_so {
+    overflow: hidden;
+    width: 1170px;
+    margin: 10px auto 0;
+    clear: both;
+    padding-top: 12px;
+}
+.list_so h1 {
+    font-size: 25px;
+    margin-bottom: 10px;
+    font-weight: 500;
+    background: #FFF;
+    padding: 10px 15px;
+}
+.list_so dl {
+    height: 200px;
+    margin-bottom: 15px;
+    background: #FFF;
+    padding: 10px;
+    position: relative;
+}
+.list_so dd {
+    padding-left: 25px;
+    font-size: 14px;
+    width: 900px;
+}
+.list_so dd p {
+    margin: 0 0 8px;
+}
+.list_so dd a {
+    color: #337ab7;
+}
+.list_so dd span {
+    border: 1px solid #DDD;
+    background: #f5f5f5;
+    border-radius: 3px;
+    padding: 2px 8px;
+    margin-left: 10px;
+    font-size: 13px;
+}
+.list_so img {
+    height: 200px;
+    width: 140px;
+}
 /* ---------------------------------------------------------------------------- */
 /* -------------------------------Owl-Carousel--------------------------------- */
 /* ---------------------------------------------------------------------------- */
@@ -477,6 +594,12 @@ body.sub-page .logo {
     margin: 5px 0 10px 0;
 }
 
+.box .search {
+    margin-right: 5%;
+    margin-left: 70%;
+    color: #c8a06a;
+    display: inline-block;
+}
 .box .box-header {
     padding: 8px 15px;
     background-color: #FFD800;
@@ -1245,4 +1368,29 @@ li.tweets_avatar {
 
 .comment textarea {
     height: 210px;
+}
+
+/* ---------------------------------------------------------------------------- */
+/* -------------------------------Play Effect----------------------------------- */
+/* ---------------------------------------------------------------------------- */
+.play_container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -1px;
+    margin-left: -1px;
+    width: 1366px;
+    height: 800px;
+    z-index: 1000;
+}
+
+/**
+ backgroud
+ */
+#background
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -100;
 }
