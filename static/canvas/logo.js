@@ -2,6 +2,7 @@
  * Created by lee on 2017/6/20.
  */
 var canvas = document.getElementById("logo");
+var logo_container = document.getElementById("logo_container");
 var ctx = canvas.getContext('2d');
 var img;
 var stats = new Stats();
@@ -9,12 +10,15 @@ stats.setMode(0);
 stats.domElement.style.position = 'absolute';
 stats.domElement.style.right = '0px';
 stats.domElement.style.top = '0px';
-document.body.appendChild( stats.domElement );
+// document.body.appendChild( stats.domElement );
 
 
+canvas.width = logo_container.clientWidth;
+canvas.height = logo_container.clientHeight;
+// canvas.height = window.innerHeight/8;
 //canvas.style.height="80px"
-canvas.width = window.innerWidth/2;
-canvas.height = window.innerHeight/8;
+// canvas.width = window.innerWidth/2;
+// canvas.height = window.innerHeight/8;
 //canvas.height = "80px";
 
 var mouseX = null, mouseY = null;
@@ -30,6 +34,12 @@ Array.prototype.forEach = function (callback) {
     for (var i = 0; i < this.length; i++) {
         callback.call((typeof this[i] === "object") ? this[i] : window, i, this[i]);
     }
+};
+window.onresize = function() {
+    img.height = logo_container.clientHeight;
+    img.width = logo_container.clientWidth;
+    canvas.height = logo_container.clientHeight;
+    canvas.width = logo_container.clientWidth;
 };
 window.onload = function () {
     var obj = document.getElementById('logo');
@@ -160,7 +170,7 @@ function animate(tick) {
 
         tick(tickTime);
 
-        stats.update();
+        //stats.update();
 
         LOGO_RAF(function () {
             animate(tick)
@@ -197,6 +207,11 @@ Particle.prototype = {
             ctx.fillStyle = this.color;
             oldColor = this.color
         }
+        // var gradient = ctx.createRadialGradient(0,0, img.width, 0);
+        // gradient.addColorStop("0", "magenta");
+        // gradient.addColorStop("0.5", "blue");
+        // gradient.addButtonEvent("1.0", "red");
+        // ctx.fillStyle=gradient
         ctx.fillRect(this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
     },
 
@@ -304,16 +319,20 @@ function useImage() {
 //use text
 function useText(text) {
     img = document.createElement('canvas');
-    var top = document.getElementById('top');
-    //img.width = top.width/3;
-    //img.height = top.height/2;
-    //img.width = 240;
-    //img.height = 70;
+    var logo = document.getElementById('logo');
+    img.width = logo.width;
+    img.height = logo.height;
     var imgctx = img.getContext("2d");
-    imgctx.textAlign = "center";
+    imgctx.textAlign = "left";
     imgctx.textBaseline = "left";
-    imgctx.font = "50px 微软雅黑";
-    imgctx.fillText(text || '猩猩助手', img.width / 2, img.height / 2);
+    imgctx.font = "60px 微软雅黑";
+    var gradient = imgctx.createLinearGradient(0,0, img.width, 0);
+    gradient.addColorStop("0", "magenta");
+    gradient.addColorStop("0.5", "blue");
+    gradient.addColorStop("1.0", "red");
+    imgctx.fillStyle=gradient
+    imgctx.fillText(text || '猩猩助手', img.width / 10, img.height*3/4);
+    // imgctx.strokeText(text || '猩猩助手', img.width / 10, img.height*3/4);
     canvasHandle.init();
 }
 useText("达神影视");
