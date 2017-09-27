@@ -45,7 +45,7 @@
             <div class="p_list">
                 <h2>阿里云视频</h2>
                 <ul class="p_list_03">
-                    {% for item in range(tv_info.tv_index) %}
+                    {% for item in range(int(tv_info.tv_index)) %}
                     <li><a title="第{{item+1}}集" href="/play/tv/{{tv_info.tv_id}}?index={{item+1}}"
                            target="_blank">第{{item+1}}集</a></li>
                     {% end %}

@@ -3,6 +3,7 @@
 
 import tornado.web
 import tornado.gen
+from tornado.log import access_log
 from handlers.base_handler import BaseHandler
 
 class TVHandler(BaseHandler):
@@ -44,7 +45,7 @@ class TVInfoHandler(BaseHandler):
         if args and 0 < len(args):
             tv_id = args[0]
             tv_info = yield self.db.tv.find_one({"tv_id":tv_id})
-
+            access_log.info(tv_info)
             render_info = TVRenderInfo(tv_info)
             if hasattr(render_info, "tv_image_path"):
                 render_info.tv_image_path = self.static_url(render_info.tv_image_path)
@@ -57,7 +58,7 @@ class TVPageHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self, *args, **kwargs):
         cursor = self.db.tv.find()
-        movie_list = []
+        #movie_list = []
         item_list = yield cursor.to_list(None)
         page_count = int(len(item_list)/30) +1
         page_index = int(args[0])

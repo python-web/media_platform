@@ -59,7 +59,8 @@ class PlayHandler(BaseHandler):
                         iqyi_result = self._get_iqyi_play_url(target_url, choice=choice)
                         if iqyi_result:
                             target_url = iqyi_result
-                        self.render("html5_player.html", video_lists=target_url, use_flv = bool_use_flv)
+                        print("targeturl:{0}".format(target_url))
+                        self.render("html5_player.html", video_lists=target_url, use_flv = bool_use_flv, name=movie_id)
             elif MediaTypeName.CartoonName.value == args[0]:
                 pass;
             elif MediaTypeName.M3D.value == args[0]:
