@@ -110,3 +110,34 @@ class MovieInfo():
     @property
     def performer(self):
         return self._performer
+class MediaType(Enum):
+    M3U8= "application/vnd.apple.mpegurl"
+    MP4 = "video/mp4"
+    FLV = "video/flv"
+class TVPlayURL():
+    def __init__(self):
+        self._media_type = self._resolution_type = self._profile = self._src = ""
+    @property
+    def src(self):
+        return self._src
+    @src.setter
+    def src(self, src):
+        self._src = src
+    @property
+    def resolution_type(self):
+        return self._resolution_type
+    @resolution_type.setter
+    def resolution_type(self, type):
+        self._resolution_type = type
+    @property
+    def profile(self):
+        return self._profile
+    @profile.setter
+    def profile(self, profile):
+        self._profile = profile
+    @property
+    def media_type(self):
+        return self._media_type
+    @media_type.setter
+    def media_type(self, media_type):
+        self._media_type = media_type

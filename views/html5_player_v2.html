@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block header_title %} Play video {% end %}
+{% block header_static %}
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+<script type="text/javascript" src="{{static_url('video-js-6.2.7/video.js')}}"> </script>
+<script type="text/javascript" src="{{static_url('js/videojs-contrib-media-sources.min.js')}}"> </script>
+<!-- 清晰度切换 -->
+<script type="text/javascript" src="{{static_url('video-js-6.2.7/videojs-resolution-switcher.js')}}"></script>
+<!-- 水印-->
+<script type="text/javascript" src="{{static_url('video-js-6.2.7/watermark.js')}}"></script>
+<!-- 播放HLS视频 跨域必须开启-->
+<script type="text/javascript" src="{{static_url('js/videojs-contrib-hls.js')}}"></script>
+<!-- 热键设定-->
+<script type="text/javascript" src="{{static_url('video-js-6.2.7/videojs.hotkeys.js')}}"></script>
+<!-- 播放列表-->
+<script type="text/javascript" src="{{static_url('video-js-6.2.7/videojs-playlist.js')}}"></script>
+
+
+<script type="text/javascript" src="{{static_url('video-js-6.2.7/flv.js')}}"></script>
+
+<link rel="stylesheet" href="{{static_url('video-js-6.2.7/video-js.css')}}">
+<link rel="stylesheet" href="{{static_url('css/video_player.css')}}">
+<link rel="stylesheet" href="{{static_url('video-js-6.2.7/watermark.css')}}">
+<link rel="stylesheet" herf="{{static_url('video-js-6.2.7/videojs-resolution-switcher.css')}}">
+<script>
+    videojs.options.flash.swf = "{{static_url('video-js-6.2.7/video-js.swf')}}";
+</script>
+{% end %}
+{% block body %}
+<div style="background-color: #1b1b1b; z-index: -1">
+    <div class="video-title">
+        <div class="wrap wrap-1280">
+            <div class=vt-headline>
+                <h1>正在播放: <i title={{name}} id="js-video_title">{{name}}</i></h1>
+            </div>
+        </div>
+    </div>
+    <div class="wrap wrap-1280">
+        <div class="video-container">
+            <div class="video-player">
+                <div id="js_video" style="position: relative;top: 20px">
+                    {% if use_flv %}
+                    <video id="play_demon" class="video-js " vjs-fluid aspectRatio="16:9"  controls preload="auto" height="620px" width="1120px" data-setup='{"techOrder":[ "html5","flash"]}' poster="">
+                    </video>
+                    {% else%}
+                    <video id="play_demon" class="video-js " vjs-fluid aspectRatio="16:9" controls preload="auto" height="620px" width="1120px" data-setup='{"techOrder":[ "html5", "flash"]}' poster="">
+                    </video>
+                    {% end %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if use_flv %}
+<script>
+    if (flvjs.isSupported())
+    {
+        var player_content = document.getElementById("play_demon");
+        {% for video in video_lists %}
+        var player = flvjs.createPlayer({type:'flv', url:'{{video[1]}}', isLive:true});
+        {% end %}
+        player.attachMediaElement(player_content);
+        player.load();
+        player.play();
+
+    }
+</script>
+{% else %}
+<script>
+
+    var Player = videojs('play_demon', {
+            "controls": true,
+            "autoplay": false,
+            "preload": "auto" ,
+            plugins: {
+                videoJsResolutionSwitcher: {
+                    default: 'low', // Default resolution [{Number}, 'low', 'high'],
+                    dynamicLabel: true
+                }
+            }
+        },
+        function(){
+            var player = this;
+            window.player = player
+            var resolution_list = new Array();
+            {% for item in video_lists %}
+            var video_item = { src : "{% raw item.src[0] %}" , type:"{{item.media_type}}", label:"{{item.resolution_type}}" , res:"{{item.profile}}"};
+            resolution_list.push(video_item);
+            {% end %}
+            player.updateSrc(resolution_list);
+            player.on('resolutionchange', function(){
+                console.info('Source changed to %s', player.src())
+            })
+        })
+    Player.ready(function () {
+        this.hotkeys({volumeStep:0.1, seekStep:5, enableModifiersForNumbers: false});
+    });
+    //watermark settings
+    Player.watermark({file:"{{static_url('images/lee.png')}}"
+        , xpos:0
+        , ypos:0
+        , xrepeat:0
+        , opacity:0.5});
+
+</script>
+{% end %}
+{% end %}

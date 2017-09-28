@@ -1,10 +1,11 @@
 #! /usr/bin/env python
 # -*- coding: UTF-8 -*-
 from handlers.base_handler import BaseHandler
-from utils.common_data import MovieInfoName, MediaTypeName, TVInfoName
+from utils.common_data import MovieInfoName, MediaTypeName, TVInfoName, TVPlayURL, MediaType
 from you_get import *
 from you_get.extractors import *
 from you_get.common import *
+import array
 import tornado.web
 import tornado.gen
 class PlayHandler(BaseHandler):
@@ -17,18 +18,12 @@ class PlayHandler(BaseHandler):
             if MediaTypeName.TVName.value == args[0]:
                 tv_id = args[1]
                 tv_index = int(self.get_argument("index", None))#集数
-                item = yield self.db.tv.find_one({"tv_id":tv_id})
-                if tv_index and item and isinstance(item, dict) and TVInfoName.PlayUrl.value in item:
-                    play_url_list = item.get(TVInfoName.PlayUrl.value)
-                    if tv_index <= len(play_url_list):#当前集数存在
-                        target_play_url_list = play_url_list[tv_index-1]
-                        if target_play_url_list and isinstance(target_play_url_list, list) and 0 < len(target_play_url_list):
-                            target_url = [play_url for play_url in target_play_url_list]#清晰度判断
+                tv_play_list = yield self._play_tv(tv_id,tv_index)
+                if tv_play_list:
+                    self.render("html5_player_v2.html", video_lists=tv_play_list, use_flv = False, name=tv_id)
                             #通过视频解析接口播放视频
-                            if target_url[0][0] == "remote":#播放类型为remote
-                                self.redirect(target_url[0][1])
-                            else:
-                                self.render("html5_player.html", video_lists=target_url)
+                    #self.render("html5_player.html", video_lists=target_url, use_flv = False, name=tv_id)
+                    #self.render("play_test.html", video_lists=target_url)
 
             elif MediaTypeName.MovieName.value == args[0]:
                 movie_id = args[1]
@@ -60,7 +55,8 @@ class PlayHandler(BaseHandler):
                         if iqyi_result:
                             target_url = iqyi_result
                         print("targeturl:{0}".format(target_url))
-                        self.render("html5_player.html", video_lists=target_url, use_flv = bool_use_flv, name=movie_id)
+                        # self.render("html5_player.html", video_lists=target_url, use_flv = bool_use_flv, name=movie_id)
+                        self.render("vlc_player.html", video_lists=target_url, use_flv = bool_use_flv, name=movie_id)
             elif MediaTypeName.CartoonName.value == args[0]:
                 pass;
             elif MediaTypeName.M3D.value == args[0]:
@@ -95,6 +91,19 @@ class PlayHandler(BaseHandler):
             #     # self.render("ch_player.html", video_url=play_url)
             #     # self.render("ch_player.html", video_url=play_list)
 
+    @tornado.gen.coroutine
+    def _play_tv(self, tv_id, tv_index):
+        iqiyi_play_list = []
+        if tv_id and 0 < tv_index:
+            item = yield self.db.tv.find_one({"tv_id":tv_id})
+            if tv_index and item and isinstance(item, dict) and TVInfoName.PlayUrl.value in item:
+                play_url_list = item.get(TVInfoName.PlayUrl.value)
+                if tv_index <= len(play_url_list):#当前集数存在
+                    target_play_url_list = play_url_list[tv_index-1]
+                    if target_play_url_list and isinstance(target_play_url_list, list) and 0 < len(target_play_url_list):
+                        target_url = [target_play_url_list]#清晰度判断
+                        iqiyi_play_list = self._get_iqiyi_play_list(target_url)
+            return iqiyi_play_list
 
     def _get_bilibili_play_url(self, play_list):
         is_true = False
@@ -124,6 +133,20 @@ class PlayHandler(BaseHandler):
             return play_list
         else:
             return None
+    def _get_iqiyi_play_list(self, play_url):
+        out_list = []
+        for url in play_url:
+            if url[0] == "application/m3u8_iqyi":
+                iqiyi_site = iqiyi.Iqiyi()
+                iqiyi_site.download_by_url(url[1], info_only=True)
+                for resolution_type, item in iqiyi_site.streams.items():
+                    tv_play_url = TVPlayURL()
+                    tv_play_url.resolution_type = resolution_type
+                    tv_play_url.profile = int(str(item.get("video_profile")).rstrip('p'))
+                    tv_play_url.media_type = MediaType.M3U8.value
+                    tv_play_url.src = item.get('src')
+                    out_list.append(tv_play_url)
+        return out_list
 
     def _get_iqyi_play_url(self, play_list, choice=None):
         is_ture = False
@@ -134,9 +157,11 @@ class PlayHandler(BaseHandler):
                 iqiyi_site = iqiyi.Iqiyi()
                 iqiyi_site.download_by_url(url[1], info_only=True)
                 if choice == "高清":
-                    choice = "TD"
+                    choice = "HD"
                 elif choice == "标清":
-                    choice == "SD"
+                    choice = "SD"
+                else:
+                    choice = "HD"
                 print("streams:{0}".format(iqiyi_site.streams))
                 url[1] = iqiyi_site.streams.get(choice).get("src")[0]
         out_play_list = []

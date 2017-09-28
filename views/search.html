@@ -1,0 +1,23 @@
+{% extends "header.html" %}
+
+{% block header_title %} Movie {% end %}
+{% block header_static %}
+<link rel="stylesheet", href="{{ static_url('css/css.css')}}">
+{% end %}
+{% block body %}
+
+<div class="list_so">
+    <h1>关键词: {{keyword}} 的结果</h1>
+    {% for item in search_items %}
+    <dl class="lf">
+        <dt class="lf">
+            <a class="so_pic" href="/movie/{{item._id}}" target="_blank" title="{{item._name}}">
+                <img src="{{item._image_url}}">
+            </a>
+        </dt>
+    </dl>
+    {% end %}
+</div>
+<div class="container">
+</div>
+{% end %}

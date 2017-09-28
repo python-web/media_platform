@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block header_title %} Play video {% end %}
+{% block header_static %}
+
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+<link rel="stylesheet" href="{{static_url('video-js-5.19.2/video-js.css')}}">
+<link rel="stylesheet" href="{{static_url('css/video_player.css')}}">
+{% end %}
+{% block body %}
+<div style="background-color: #1b1b1b; z-index: -1">
+    <div class="video-title">
+        <div class="wrap wrap-1280">
+            <div class=vt-headline>
+                <h1>正在播放: <i title={{name}} id="js-video_title">{{name}}</i></h1>
+            </div>
+        </div>
+    </div>
+    <div class="wrap wrap-1280">
+        <div class="video-container">
+            <div class="video-player">
+                <div id="js_video" style="position: relative;top: 20px">
+                    {% for video in video_lists %}
+                    <embed type="application/x-vlc-plugin"
+                           name="video1"
+                           id = "vlc"
+                           autoplay="no" loop="yes" width="1120px" height="615px"
+                           target="{{video[1]}} " volume="50" branding="false"/>
+                    <br />
+                    {% end %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var vlc = document.getElementById("vlc");
+    vlc.video.logo.enable();
+    vlc.video.logo.x = 0;
+    vlc.video.logo.y = 0;
+    vlc.video.logo.opacity = 0.5;
+    vlc.video.logo.position = "left";
+    vlc.video.logo.file("{{static_url('images/lee.png')}}");
+</script>
+
+{% end %}
