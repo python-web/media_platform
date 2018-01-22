@@ -5,8 +5,11 @@ pipeline{
 				{
 						agent{
 								docker{
-										image:yuetianle/mediaplatform
+										image 'yuetianle/mediaplatform'
 								}
+						}
+						steps {
+								sh 'pwd'
 						}
 				}
 		}
