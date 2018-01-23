@@ -5,7 +5,7 @@ pipeline{
 				{
 						agent{
 								docker{
-										image 'yuetianle/mediaplatform'
+										image 'yuetianle/mediaplatform:2.1.0'
 								}
 						}
 						steps {
